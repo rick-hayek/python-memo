@@ -1,0 +1,228 @@
+# Chinese translations for Memo App
+msgid ""
+msgstr ""
+"Language: zh_CN\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Memo App"
+msgstr "备忘录网站"
+
+msgid "Memo"
+msgstr "备忘录"
+
+msgid "Login"
+msgstr "登录"
+
+msgid "Logout"
+msgstr "登出"
+
+msgid "Home"
+msgstr "首页"
+
+msgid "Welcome to Memo App"
+msgstr "欢迎使用备忘录网站"
+
+msgid "You are logged in"
+msgstr "您已登录"
+
+msgid "Username"
+msgstr "用户名"
+
+msgid "Email"
+msgstr "邮箱"
+
+msgid "OAuth Provider"
+msgstr "OAuth提供商"
+
+msgid "Not provided"
+msgstr "未提供"
+
+msgid "Features are under development, please stay tuned..."
+msgstr "功能开发中，敬请期待..."
+
+msgid "Please login first"
+msgstr "请先登录"
+
+msgid "Use GitHub account to login and start using memo features."
+msgstr "使用GitHub账号登录以开始使用备忘录功能。"
+
+msgid "Login Now"
+msgstr "立即登录"
+
+msgid "Sign in with GitHub"
+msgstr "使用 GitHub 登录"
+
+msgid "Login with GitHub account"
+msgstr "使用GitHub账号登录"
+
+msgid "OAuth authentication failed: Access token not obtained"
+msgstr "OAuth认证失败：未获取到访问令牌"
+
+msgid "Welcome, %(username)s!"
+msgstr "欢迎，%(username)s！"
+
+msgid "OAuth authentication failed: %(error)s"
+msgstr "OAuth认证失败：%(error)s"
+
+msgid "You have successfully logged out"
+msgstr "您已成功登出"
+
+msgid "Please login first"
+msgstr "请先登录"
+
+msgid "Language"
+msgstr "语言"
+
+msgid "Chinese"
+msgstr "中文"
+
+msgid "English"
+msgstr "English"
+
+msgid "Profile"
+msgstr "个人资料"
+
+msgid "User Profile"
+msgstr "用户信息"
+
+msgid "Avatar"
+msgstr "头像"
+
+msgid "Account Created"
+msgstr "账户创建时间"
+
+msgid "Last Updated"
+msgstr "最后更新时间"
+
+msgid "Note"
+msgstr "提示"
+
+msgid "User information is read-only and comes from your OAuth provider."
+msgstr "用户信息为只读，来源于您的OAuth提供商。"
+
+msgid "Back to Home"
+msgstr "返回首页"
+
+msgid "Memos"
+msgstr "备忘录"
+
+msgid "My Memos"
+msgstr "我的备忘录"
+
+msgid "Create New Memo"
+msgstr "创建新备忘录"
+
+msgid "Create Memo"
+msgstr "创建备忘录"
+
+msgid "Edit"
+msgstr "编辑"
+
+msgid "Delete"
+msgstr "删除"
+
+msgid "Title"
+msgstr "标题"
+
+msgid "Content"
+msgstr "内容"
+
+msgid "Status"
+msgstr "状态"
+
+msgid "Created"
+msgstr "创建时间"
+
+msgid "Updated"
+msgstr "更新时间"
+
+msgid "Create Your First Memo"
+msgstr "创建您的第一个备忘录"
+
+msgid "No memos yet."
+msgstr "还没有备忘录。"
+
+msgid "Edit Memo"
+msgstr "编辑备忘录"
+
+msgid "Update Memo"
+msgstr "更新备忘录"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Memo created successfully"
+msgstr "备忘录创建成功"
+
+msgid "Memo updated successfully"
+msgstr "备忘录更新成功"
+
+msgid "Memo deleted successfully"
+msgstr "备忘录删除成功"
+
+msgid "Memo not found"
+msgstr "备忘录未找到"
+
+msgid "Status updated successfully"
+msgstr "状态更新成功"
+
+msgid "Title is required"
+msgstr "标题不能为空"
+
+msgid "Content is required"
+msgstr "内容不能为空"
+
+msgid "Invalid status"
+msgstr "无效状态"
+
+msgid "Are you sure you want to delete this memo?"
+msgstr "确定要删除这个备忘录吗？"
+
+msgid "Enter memo title"
+msgstr "输入备忘录标题"
+
+msgid "Enter memo content"
+msgstr "输入备忘录内容"
+
+msgid "Pending"
+msgstr "待办"
+
+msgid "In Progress"
+msgstr "进行中"
+
+msgid "Completed"
+msgstr "已完成"
+
+msgid "Closed"
+msgstr "关闭"
+
+msgid "Expired"
+msgstr "过期"
+
+msgid "Expiration Date"
+msgstr "过期日期"
+
+msgid "Optional"
+msgstr "可选"
+
+msgid "Select expiration date and time"
+msgstr "选择过期日期和时间"
+
+msgid "Leave empty for no expiration"
+msgstr "留空表示永不过期"
+
+msgid "Expires"
+msgstr "过期时间"
+
+msgid "Invalid date format"
+msgstr "日期格式无效"
+
+msgid "CSRF token validation failed"
+msgstr "CSRF令牌验证失败"
+
+msgid "Previous"
+msgstr "上一页"
+
+msgid "Next"
+msgstr "下一页"
+

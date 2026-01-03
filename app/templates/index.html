@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Home') }} - {{ _('Memo App') }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-8">
+        <!-- 欢迎区域 -->
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold text-primary mb-3">
+                <i class="fas fa-sticky-note me-3"></i>{{ _('Welcome to Memo App') }}
+            </h1>
+            <p class="lead text-muted mb-4">{{ _('Your personal memo management system') }}</p>
+        </div>
+
+        {% if current_user.is_authenticated %}
+            <!-- 已登录用户区域 -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="mb-3">
+                                <i class="fas fa-user-circle fa-3x text-primary"></i>
+                            </div>
+                            <h5 class="card-title">{{ _('Welcome back, %(username)s!', username=current_user.username) }}</h5>
+                            <p class="card-text text-muted">{{ _('Ready to manage your memos?') }}</p>
+                            <div class="d-grid gap-2">
+                                <a href="{{ url_for('memo.list') }}" class="btn btn-primary">
+                                    <i class="fas fa-list me-2"></i>{{ _('View My Memos') }}
+                                </a>
+                                <a href="{{ url_for('memo.create') }}" class="btn btn-outline-primary">
+                                    <i class="fas fa-plus me-2"></i>{{ _('Create New Memo') }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="mb-3">
+                                <i class="fas fa-chart-line fa-3x text-success"></i>
+                            </div>
+                            <h5 class="card-title">{{ _('Quick Stats') }}</h5>
+                            <p class="card-text text-muted">{{ _('Track your productivity') }}</p>
+                            <div class="row text-center g-3">
+                                <div class="col-4">
+                                    <div class="p-2">
+                                        <div class="h4 mb-0 text-primary">{{ current_user.memos.filter_by(status='pending').count() }}</div>
+                                        <small class="text-muted">{{ _('Pending') }}</small>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="p-2">
+                                        <div class="h4 mb-0 text-warning">{{ current_user.memos.filter_by(status='in_progress').count() }}</div>
+                                        <small class="text-muted">{{ _('In Progress') }}</small>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="p-2">
+                                        <div class="h4 mb-0 text-success">{{ current_user.memos.filter_by(status='completed').count() }}</div>
+                                        <small class="text-muted">{{ _('Completed') }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 最近备忘录 -->
+            {% set recent_memos = current_user.memos.order_by(Memo.updated_at.desc()).limit(3).all() %}
+            {% if recent_memos %}
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="fas fa-clock me-2"></i>{{ _('Recent Memos') }}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        {% for memo in recent_memos %}
+                        <div class="col-md-4">
+                            <div class="card h-100 border-0 shadow-sm">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h6 class="card-title mb-0 text-truncate">{{ memo.title }}</h6>
+                                        <span class="badge {{ 'bg-secondary' if memo.status == 'pending' else 'bg-warning' if memo.status == 'in_progress' else 'bg-success' if memo.status == 'completed' else 'bg-danger' }} ms-2">
+                                            {{ _(memo.status.replace('_', ' ').title()) }}
+                                        </span>
+                                    </div>
+                                    <p class="card-text small text-muted">{{ memo.content | truncate(50) }}</p>
+                                    <div class="text-end">
+                                        <a href="{{ url_for('memo.edit', memo_id=memo.id) }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+        {% else %}
+            <!-- 未登录用户区域 -->
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card h-100 shadow">
+                        <div class="card-body text-center p-5">
+                            <div class="mb-4">
+                                <i class="fas fa-rocket fa-4x text-primary"></i>
+                            </div>
+                            <h3 class="card-title mb-3">{{ _('Get Started') }}</h3>
+                            <p class="card-text text-muted mb-4">
+                                {{ _('Sign in with your GitHub account to start creating and managing your memos.') }}
+                            </p>
+                            <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg">
+                                <i class="fab fa-github me-2"></i>{{ _('Sign in with GitHub') }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card h-100 shadow">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4"><i class="fas fa-star me-2 text-warning"></i>{{ _('Features') }}</h4>
+                            <ul class="list-unstyled">
+                                <li class="mb-3">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    {{ _('Create and organize memos with ease') }}
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    {{ _('Track progress with status management') }}
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    {{ _('Set expiration dates for time-sensitive memos') }}
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    {{ _('Responsive design works on all devices') }}
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    {{ _('Secure authentication with GitHub OAuth') }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Font Awesome图标库 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}

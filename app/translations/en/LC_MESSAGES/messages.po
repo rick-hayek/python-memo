@@ -1,0 +1,228 @@
+# English translations for Memo App
+msgid ""
+msgstr ""
+"Language: en\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Memo App"
+msgstr "Memo App"
+
+msgid "Memo"
+msgstr "Memo"
+
+msgid "Login"
+msgstr "Login"
+
+msgid "Logout"
+msgstr "Logout"
+
+msgid "Home"
+msgstr "Home"
+
+msgid "Welcome to Memo App"
+msgstr "Welcome to Memo App"
+
+msgid "You are logged in"
+msgstr "You are logged in"
+
+msgid "Username"
+msgstr "Username"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "OAuth Provider"
+msgstr "OAuth Provider"
+
+msgid "Not provided"
+msgstr "Not provided"
+
+msgid "Features are under development, please stay tuned..."
+msgstr "Features are under development, please stay tuned..."
+
+msgid "Please login first"
+msgstr "Please login first"
+
+msgid "Use GitHub account to login and start using memo features."
+msgstr "Use GitHub account to login and start using memo features."
+
+msgid "Login Now"
+msgstr "Login Now"
+
+msgid "Sign in with GitHub"
+msgstr "Sign in with GitHub"
+
+msgid "Login with GitHub account"
+msgstr "Login with GitHub account"
+
+msgid "OAuth authentication failed: Access token not obtained"
+msgstr "OAuth authentication failed: Access token not obtained"
+
+msgid "Welcome, %(username)s!"
+msgstr "Welcome, %(username)s!"
+
+msgid "OAuth authentication failed: %(error)s"
+msgstr "OAuth authentication failed: %(error)s"
+
+msgid "You have successfully logged out"
+msgstr "You have successfully logged out"
+
+msgid "Please login first"
+msgstr "Please login first"
+
+msgid "Language"
+msgstr "Language"
+
+msgid "Chinese"
+msgstr "Chinese"
+
+msgid "English"
+msgstr "English"
+
+msgid "Profile"
+msgstr "Profile"
+
+msgid "User Profile"
+msgstr "User Profile"
+
+msgid "Avatar"
+msgstr "Avatar"
+
+msgid "Account Created"
+msgstr "Account Created"
+
+msgid "Last Updated"
+msgstr "Last Updated"
+
+msgid "Note"
+msgstr "Note"
+
+msgid "User information is read-only and comes from your OAuth provider."
+msgstr "User information is read-only and comes from your OAuth provider."
+
+msgid "Back to Home"
+msgstr "Back to Home"
+
+msgid "Memos"
+msgstr "Memos"
+
+msgid "My Memos"
+msgstr "My Memos"
+
+msgid "Create New Memo"
+msgstr "Create New Memo"
+
+msgid "Create Memo"
+msgstr "Create Memo"
+
+msgid "Edit"
+msgstr "Edit"
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "Title"
+msgstr "Title"
+
+msgid "Content"
+msgstr "Content"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Created"
+msgstr "Created"
+
+msgid "Updated"
+msgstr "Updated"
+
+msgid "Create Your First Memo"
+msgstr "Create Your First Memo"
+
+msgid "No memos yet."
+msgstr "No memos yet."
+
+msgid "Edit Memo"
+msgstr "Edit Memo"
+
+msgid "Update Memo"
+msgstr "Update Memo"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Memo created successfully"
+msgstr "Memo created successfully"
+
+msgid "Memo updated successfully"
+msgstr "Memo updated successfully"
+
+msgid "Memo deleted successfully"
+msgstr "Memo deleted successfully"
+
+msgid "Memo not found"
+msgstr "Memo not found"
+
+msgid "Status updated successfully"
+msgstr "Status updated successfully"
+
+msgid "Title is required"
+msgstr "Title is required"
+
+msgid "Content is required"
+msgstr "Content is required"
+
+msgid "Invalid status"
+msgstr "Invalid status"
+
+msgid "Are you sure you want to delete this memo?"
+msgstr "Are you sure you want to delete this memo?"
+
+msgid "Enter memo title"
+msgstr "Enter memo title"
+
+msgid "Enter memo content"
+msgstr "Enter memo content"
+
+msgid "Pending"
+msgstr "Pending"
+
+msgid "In Progress"
+msgstr "In Progress"
+
+msgid "Completed"
+msgstr "Completed"
+
+msgid "Closed"
+msgstr "Closed"
+
+msgid "Expired"
+msgstr "Expired"
+
+msgid "Expiration Date"
+msgstr "Expiration Date"
+
+msgid "Optional"
+msgstr "Optional"
+
+msgid "Select expiration date and time"
+msgstr "Select expiration date and time"
+
+msgid "Leave empty for no expiration"
+msgstr "Leave empty for no expiration"
+
+msgid "Expires"
+msgstr "Expires"
+
+msgid "Invalid date format"
+msgstr "Invalid date format"
+
+msgid "CSRF token validation failed"
+msgstr "CSRF token validation failed"
+
+msgid "Previous"
+msgstr "Previous"
+
+msgid "Next"
+msgstr "Next"
+

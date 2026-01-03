@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('User Profile') }} - {{ _('Memo App') }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-6">
+        <div class="card shadow">
+            <div class="card-header">
+                <h2 class="mb-0"><i class="fas fa-user me-2"></i>{{ _('User Profile') }}</h2>
+            </div>
+            <div class="card-body">
+                <!-- 用户头像和基本信息 -->
+                <div class="text-center mb-5">
+                    {% if user.avatar_url %}
+                        <img src="{{ user.avatar_url }}" alt="{{ _('Avatar') }}" class="rounded-circle mb-3 shadow"
+                             style="width: 120px; height: 120px; object-fit: cover; border: 4px solid #e9ecef;">
+                    {% else %}
+                        <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center mb-3 text-white shadow"
+                             style="width: 120px; height: 120px; font-size: 3rem;">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    {% endif %}
+                    <h3 class="mb-2">{{ user.username or _('Not provided') }}</h3>
+                    <p class="text-muted mb-3">
+                        <i class="fab fa-github me-1"></i>{{ _('Connected via %(provider)s', provider=user.oauth_provider.title()) }}
+                    </p>
+                </div>
+
+                <!-- 统计信息 -->
+                <div class="row g-3 mb-4">
+                    <div class="col-4">
+                        <div class="card bg-light border-0 text-center">
+                            <div class="card-body py-3">
+                                <div class="h4 mb-1 text-primary">{{ user.memos.count() }}</div>
+                                <small class="text-muted">{{ _('Total Memos') }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card bg-light border-0 text-center">
+                            <div class="card-body py-3">
+                                <div class="h4 mb-1 text-success">{{ user.memos.filter_by(status='completed').count() }}</div>
+                                <small class="text-muted">{{ _('Completed') }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card bg-light border-0 text-center">
+                            <div class="card-body py-3">
+                                <div class="h4 mb-1 text-warning">{{ user.memos.filter_by(status='in_progress').count() }}</div>
+                                <small class="text-muted">{{ _('In Progress') }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <!-- 详细信息 -->
+                <h5 class="mb-3"><i class="fas fa-info-circle me-2"></i>{{ _('Account Details') }}</h5>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-muted small">{{ _('USERNAME') }}</label>
+                            <div class="form-control-plaintext bg-light p-3 rounded border">
+                                {{ user.username or _('Not provided') }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-muted small">{{ _('EMAIL') }}</label>
+                            <div class="form-control-plaintext bg-light p-3 rounded border">
+                                {{ user.email or _('Not provided') }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-muted small">{{ _('ACCOUNT CREATED') }}</label>
+                            <div class="form-control-plaintext bg-light p-3 rounded border">
+                                <i class="fas fa-calendar-plus me-1 text-muted"></i>
+                                {{ user.created_at.strftime('%Y-%m-%d %H:%M') if user.created_at else _('Not provided') }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-muted small">{{ _('LAST UPDATED') }}</label>
+                            <div class="form-control-plaintext bg-light p-3 rounded border">
+                                <i class="fas fa-edit me-1 text-muted"></i>
+                                {{ user.updated_at.strftime('%Y-%m-%d %H:%M') if user.updated_at else _('Not provided') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 信息提示 -->
+                <div class="alert alert-info mt-4" role="alert">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>{{ _('Note') }}:</strong> {{ _('User information is read-only and comes from your OAuth provider.') }}
+                </div>
+            </div>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="d-flex gap-3 justify-content-center mt-4">
+            <a href="{{ url_for('memo.list') }}" class="btn btn-primary">
+                <i class="fas fa-list me-2"></i>{{ _('My Memos') }}
+            </a>
+            <a href="{{ url_for('index.index') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-home me-2"></i>{{ _('Back to Home') }}
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Font Awesome图标库 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
