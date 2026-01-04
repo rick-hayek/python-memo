@@ -45,6 +45,28 @@ class Config:
     WTF_CSRF_ENABLED = True
     WTF_CSRF_SECRET_KEY = os.environ.get('WTF_CSRF_SECRET_KEY') or SECRET_KEY  # 使用相同的密钥
     WTF_CSRF_TIME_LIMIT = 3600  # CSRF令牌有效期1小时
+    
+    # 会话安全配置
+    SESSION_COOKIE_SECURE = os.environ.get('SESSION_COOKIE_SECURE', 'False').lower() == 'true'
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SAMESITE = 'Lax'  # 生产环境建议使用 'Strict'
+    
+    # HTTPS和安全头配置
+    PREFERRED_URL_SCHEME = 'https' if os.environ.get('FORCE_HTTPS', 'False').lower() == 'true' else 'http'
+    
+    # 安全头配置
+    SECURITY_HEADERS = {
+        'X-Frame-Options': 'SAMEORIGIN',  # 防止点击劫持
+        'X-Content-Type-Options': 'nosniff',  # 防止MIME类型嗅探
+        'X-XSS-Protection': '1; mode=block',  # XSS保护
+        'Referrer-Policy': 'strict-origin-when-cross-origin',  # 引用策略
+        'Permissions-Policy': 'geolocation=(), microphone=(), camera=()',  # 权限策略
+    }
+    
+    # HSTS配置（仅生产环境）
+    HSTS_MAX_AGE = 31536000  # 1年
+    HSTS_INCLUDE_SUBDOMAINS = True
+    HSTS_PRELOAD = False
 
 
 class DevelopmentConfig(Config):
@@ -61,6 +83,16 @@ class ProductionConfig(Config):
     SECRET_KEY = os.environ.get('SECRET_KEY')
     if not SECRET_KEY:
         raise ValueError("生产环境必须设置SECRET_KEY环境变量")
+    
+    # 生产环境强制HTTPS
+    SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_SAMESITE = 'Strict'
+    PREFERRED_URL_SCHEME = 'https'
+    
+    # 生产环境启用HSTS
+    HSTS_MAX_AGE = 31536000
+    HSTS_INCLUDE_SUBDOMAINS = True
+    HSTS_PRELOAD = True
 
 
 # 配置字典

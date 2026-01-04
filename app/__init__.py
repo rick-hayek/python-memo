@@ -49,6 +49,45 @@ def create_app(config_name='default'):
     babel.init_app(app, locale_selector=get_locale)
     csrf.init_app(app)
     
+    # 配置安全中间件
+    @app.after_request
+    def add_security_headers(response):
+        """添加安全头"""
+        security_headers = app.config.get('SECURITY_HEADERS', {})
+        for header, value in security_headers.items():
+            response.headers[header] = value
+        
+        # 添加HSTS头（仅HTTPS）
+        if request.is_secure and app.config.get('HSTS_MAX_AGE', 0) > 0:
+            hsts_value = f"max-age={app.config['HSTS_MAX_AGE']}"
+            if app.config.get('HSTS_INCLUDE_SUBDOMAINS'):
+                hsts_value += "; includeSubDomains"
+            if app.config.get('HSTS_PRELOAD'):
+                hsts_value += "; preload"
+            response.headers['Strict-Transport-Security'] = hsts_value
+        
+        # 添加CSP头
+        csp_policy = (
+            "default-src 'self'; "
+            "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; "
+            "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; "
+            "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; "
+            "img-src 'self' data: https:; "
+            "connect-src 'self' https://api.github.com; "
+            "frame-ancestors 'none';"
+        )
+        response.headers['Content-Security-Policy'] = csp_policy
+        
+        return response
+    
+    @app.before_request
+    def enforce_https():
+        """强制HTTPS重定向"""
+        if app.config.get('PREFERRED_URL_SCHEME') == 'https' and not request.is_secure:
+            if request.url.startswith('http://'):
+                url = request.url.replace('http://', 'https://', 1)
+                return redirect(url, code=301)
+    
     # 配置Flask-Login
     from flask_babel import gettext as _
     login_manager.login_view = 'auth.login'  # 未登录时重定向到登录页

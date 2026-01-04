@@ -11,67 +11,59 @@
             </div>
             <div class="card-body">
                 <form method="post" data-validate="true">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    {{ form.csrf_token }}
 
                     <div class="row">
                         <div class="col-md-8">
                             <div class="mb-4">
-                                <label for="title" class="form-label fw-bold">
-                                    <i class="fas fa-heading me-1"></i>{{ _('Title') }}
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <input type="text" class="form-control form-control-lg" id="title" name="title"
-                                       placeholder="{{ _('Enter a descriptive title for your memo') }}" required
-                                       maxlength="200">
+                                {{ form.title.label(class="form-label fw-bold") }}
+                                <span class="text-danger">*</span>
+                                {{ form.title(class="form-control form-control-lg") }}
+                                {% if form.title.errors %}
+                                    {% for error in form.title.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
                                 <div class="form-text">{{ _('Keep it concise and clear') }}</div>
                             </div>
                         </div>
 
                         <div class="col-md-4">
                             <div class="mb-4">
-                                <label for="status" class="form-label fw-bold">
-                                    <i class="fas fa-tasks me-1"></i>{{ _('Status') }}
-                                </label>
-                                <select class="form-select form-select-lg" id="status" name="status">
-                                    {% for status in MemoStatus.get_all_statuses() %}
-                                        <option value="{{ status }}" {{ 'selected' if status == MemoStatus.PENDING else '' }}>
-                                            <i class="fas fa-circle me-1" style="color: {% if status == 'pending' %}#6c757d{% elif status == 'in_progress' %}#ffc107{% elif status == 'completed' %}#28a745{% else %}#dc3545{% endif %}"></i>
-                                            {{ _(status.replace('_', ' ').title()) }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
+                                {{ form.status.label(class="form-label fw-bold") }}
+                                {{ form.status(class="form-select form-select-lg") }}
                                 <div class="form-text">{{ _('Set initial status') }}</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="mb-4">
-                        <label for="content" class="form-label fw-bold">
-                            <i class="fas fa-align-left me-1"></i>{{ _('Content') }}
-                            <span class="text-danger">*</span>
-                        </label>
-                        <textarea class="form-control" id="content" name="content" rows="8" required
-                                  placeholder="{{ _('Write your memo content here...') }}"></textarea>
+                        {{ form.content.label(class="form-label fw-bold") }}
+                        <span class="text-danger">*</span>
+                        {{ form.content(class="form-control") }}
+                        {% if form.content.errors %}
+                            {% for error in form.content.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        {% endif %}
                         <div class="form-text">{{ _('Supports rich text formatting') }}</div>
                     </div>
 
                     <div class="mb-4">
-                        <label for="expired_at" class="form-label fw-bold">
-                            <i class="fas fa-clock me-1"></i>{{ _('Expiration Date') }}
-                            <small class="text-muted">({{ _('Optional') }})</small>
-                        </label>
+                        {{ form.expired_at.label(class="form-label fw-bold") }}
+                        <small class="text-muted">({{ _('Optional') }})</small>
                         <div class="row">
                             <div class="col-md-6">
-                                <input type="datetime-local" class="form-control" id="expired_at" name="expired_at"
-                                       placeholder="{{ _('Select expiration date and time') }}">
+                                {{ form.expired_at(class="form-control") }}
+                                {% if form.expired_at.errors %}
+                                    {% for error in form.expired_at.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
                             </div>
                             <div class="col-md-6 d-flex align-items-center">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="no_expiry" onchange="toggleExpiry()">
-                                    <label class="form-check-label" for="no_expiry">
-                                        {{ _('No expiration') }}
-                                    </label>
-                                </div>
+                                {{ form.no_expiry(class="form-check-input") }}
+                                {{ form.no_expiry.label(class="form-check-label") }}
                             </div>
                         </div>
                         <div class="form-text">{{ _('Leave empty or check "No expiration" for memos without deadline') }}</div>
@@ -81,9 +73,7 @@
                         <a href="{{ url_for('memo.list') }}" class="btn btn-outline-secondary">
                             <i class="fas fa-times me-1"></i>{{ _('Cancel') }}
                         </a>
-                        <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="fas fa-save me-1"></i>{{ _('Create Memo') }}
-                        </button>
+                        {{ form.submit(class="btn btn-primary btn-lg") }}
                     </div>
                 </form>
             </div>

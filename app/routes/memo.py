@@ -7,6 +7,7 @@ from flask_babel import gettext as _
 from flask_wtf.csrf import validate_csrf
 from app.services.memo_service import MemoService
 from app.models.memo import MemoStatus
+from app.forms.memo import MemoForm, MemoStatusForm
 
 memo_bp = Blueprint('memo', __name__)
 
@@ -28,46 +29,27 @@ def list():
 @login_required
 def create():
     """创建备忘录"""
-    if request.method == 'POST':
-        # 验证CSRF令牌
-        try:
-            validate_csrf(request.form.get('csrf_token'))
-        except Exception as e:
-            flash(_('CSRF token validation failed'), 'error')
-            return render_template('memo/create.html', MemoStatus=MemoStatus)
-        
-        title = request.form.get('title', '').strip()
-        content = request.form.get('content', '').strip()
-        status = request.form.get('status', MemoStatus.PENDING)
-        expired_at_str = request.form.get('expired_at', '').strip()
-        
+    form = MemoForm()
+    
+    if form.validate_on_submit():
         # 处理过期时间
         expired_at = None
-        if expired_at_str:
-            try:
-                from datetime import datetime
-                expired_at = datetime.fromisoformat(expired_at_str.replace('T', ' '))
-            except ValueError:
-                flash(_('Invalid date format'), 'error')
-                return render_template('memo/create.html', MemoStatus=MemoStatus)
-
-        if not title:
-            flash(_('Title is required'), 'error')
-            return render_template('memo/create.html', MemoStatus=MemoStatus)
-
-        if not content:
-            flash(_('Content is required'), 'error')
-            return render_template('memo/create.html', MemoStatus=MemoStatus)
-
+        if form.expired_at.data and not form.no_expiry.data:
+            expired_at = form.expired_at.data
+        
         try:
-            memo = MemoService.create_memo(title, content, status, expired_at)
+            memo = MemoService.create_memo(
+                title=form.title.data,
+                content=form.content.data,
+                status=form.status.data,
+                expired_at=expired_at
+            )
             flash(_('Memo created successfully'), 'success')
             return redirect(url_for('memo.list'))
         except ValueError as e:
             flash(str(e), 'error')
-            return render_template('memo/create.html', MemoStatus=MemoStatus)
-
-    return render_template('memo/create.html', MemoStatus=MemoStatus)
+    
+    return render_template('memo/create.html', form=form, MemoStatus=MemoStatus)
 
 
 @memo_bp.route('/<int:memo_id>/edit', methods=['GET', 'POST'])
@@ -78,51 +60,35 @@ def edit(memo_id):
     if not memo:
         abort(404)
 
-    if request.method == 'POST':
-        # 验证CSRF令牌
-        try:
-            validate_csrf(request.form.get('csrf_token'))
-        except Exception as e:
-            flash(_('CSRF token validation failed'), 'error')
-            return render_template('memo/edit.html', memo=memo, MemoStatus=MemoStatus)
-        
-        title = request.form.get('title', '').strip()
-        content = request.form.get('content', '').strip()
-        status = request.form.get('status')
-        expired_at_str = request.form.get('expired_at', '').strip()
-        
+    form = MemoForm(obj=memo)
+    # 设置no_expiry复选框的初始状态
+    form.no_expiry.data = not bool(memo.expired_at)
+
+    if form.validate_on_submit():
         # 处理过期时间
         expired_at = None
-        if expired_at_str:
-            try:
-                from datetime import datetime
-                expired_at = datetime.fromisoformat(expired_at_str.replace('T', ' '))
-            except ValueError:
-                flash(_('Invalid date format'), 'error')
-                return render_template('memo/edit.html', memo=memo, MemoStatus=MemoStatus)
-
-        if not title:
-            flash(_('Title is required'), 'error')
-            return render_template('memo/edit.html', memo=memo, MemoStatus=MemoStatus)
-
-        if not content:
-            flash(_('Content is required'), 'error')
-            return render_template('memo/edit.html', memo=memo, MemoStatus=MemoStatus)
+        if form.expired_at.data and not form.no_expiry.data:
+            expired_at = form.expired_at.data
 
         # 只有当状态真正改变时才传递status参数
         status_to_update = None
-        if status and status != memo.status:
-            status_to_update = status
+        if form.status.data != memo.status:
+            status_to_update = form.status.data
 
         try:
-            MemoService.update_memo(memo_id, title=title, content=content, status=status_to_update, expired_at=expired_at)
+            MemoService.update_memo(
+                memo_id,
+                title=form.title.data,
+                content=form.content.data,
+                status=status_to_update,
+                expired_at=expired_at
+            )
             flash(_('Memo updated successfully'), 'success')
             return redirect(url_for('memo.list'))
         except ValueError as e:
             flash(str(e), 'error')
-            return render_template('memo/edit.html', memo=memo, MemoStatus=MemoStatus)
-
-    return render_template('memo/edit.html', memo=memo, MemoStatus=MemoStatus)
+    
+    return render_template('memo/edit.html', form=form, memo=memo, MemoStatus=MemoStatus)
 
 
 @memo_bp.route('/<int:memo_id>/delete', methods=['POST'])

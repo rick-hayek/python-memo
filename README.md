@@ -13,6 +13,27 @@
 - SQLite
 - Jinja2
 - Flask-Babel (多语言支持)
+- Flask-WTF (表单验证和CSRF保护)
+
+## 安全特性
+
+### 已实现的安全措施
+
+- ✅ **认证与授权**: GitHub OAuth 2.0认证 + Flask-Login会话管理
+- ✅ **CSRF保护**: Flask-WTF CSRF令牌验证
+- ✅ **SQL注入防护**: SQLAlchemy ORM参数化查询
+- ✅ **XSS防护**: Jinja2模板自动转义 + 表单内容验证
+- ✅ **会话安全**: HttpOnly、Secure、SameSite cookie配置
+- ✅ **HTTPS支持**: 生产环境强制HTTPS重定向
+- ✅ **安全头**: HSTS、CSP、X-Frame-Options等安全头
+- ✅ **输入验证**: WTForms表单验证 + 自定义安全验证器
+
+### 安全配置
+
+开发环境和生产环境有不同的安全配置：
+
+- **开发环境**: HTTP, 非安全cookie
+- **生产环境**: HTTPS强制, 安全cookie, HSTS启用
 
 ## 快速开始
 
