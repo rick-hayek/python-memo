@@ -3,6 +3,7 @@
 """
 from app import db
 from app.models.memo import Memo, MemoStatus
+from app.utils.cache import cached, clear_user_cache
 from flask_login import current_user
 
 
@@ -24,14 +25,20 @@ class MemoService:
         )
         db.session.add(memo)
         db.session.commit()
+
+        # 清除用户缓存
+        clear_user_cache(current_user.id)
+
         return memo
 
     @staticmethod
+    @cached(timeout=60)  # 缓存1分钟
     def get_memo_by_id(memo_id):
         """根据ID获取备忘录"""
         return Memo.query.filter_by(id=memo_id, user_id=current_user.id).first()
 
     @staticmethod
+    @cached(timeout=30)  # 缓存30秒
     def get_user_memos(page=1, per_page=10):
         """获取当前用户的备忘录（分页）"""
         if not current_user.is_authenticated:
@@ -65,6 +72,10 @@ class MemoService:
                 memo.completed_at = datetime.utcnow()
 
         db.session.commit()
+        
+        # 清除用户缓存
+        clear_user_cache(current_user.id)
+        
         return memo
 
     @staticmethod
@@ -76,6 +87,10 @@ class MemoService:
 
         db.session.delete(memo)
         db.session.commit()
+        
+        # 清除用户缓存
+        clear_user_cache(current_user.id)
+        
         return True
 
     @staticmethod

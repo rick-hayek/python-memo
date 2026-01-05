@@ -48,6 +48,9 @@ class Config:
     
     # 会话安全配置
     SESSION_COOKIE_SECURE = os.environ.get('SESSION_COOKIE_SECURE', 'False').lower() == 'true'
+    
+    # 日志配置
+    LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = 'Lax'  # 生产环境建议使用 'Strict'
     
@@ -95,9 +98,23 @@ class ProductionConfig(Config):
     HSTS_PRELOAD = True
 
 
+class TestingConfig(Config):
+    """测试环境配置"""
+    TESTING = True
+    DEBUG = True
+    ENV = 'testing'
+    # 测试环境使用内存数据库
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    # 测试环境禁用WTF CSRF
+    WTF_CSRF_ENABLED = False
+    # 测试环境简化会话配置
+    SESSION_COOKIE_SECURE = False
+
+
 # 配置字典
 config = {
     'development': DevelopmentConfig,
     'production': ProductionConfig,
+    'testing': TestingConfig,
     'default': DevelopmentConfig
 }

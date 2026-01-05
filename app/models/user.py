@@ -20,7 +20,11 @@ class User(UserMixin, db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
     # 唯一约束：同一OAuth提供商的用户ID唯一
-    __table_args__ = (db.UniqueConstraint('oauth_provider', 'oauth_user_id', name='uq_user_oauth'),)
+    __table_args__ = (
+        db.UniqueConstraint('oauth_provider', 'oauth_user_id', name='uq_user_oauth'),
+        db.Index('idx_user_oauth', 'oauth_provider', 'oauth_user_id'),
+        db.Index('idx_user_email', 'email'),
+    )
     
     def __repr__(self):
         return f'<User {self.username} ({self.oauth_provider})>'

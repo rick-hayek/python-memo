@@ -119,11 +119,13 @@ def create_app(config_name='default'):
     from app.routes.index import index_bp
     from app.routes.user import user_bp
     from app.routes.memo import memo_bp
+    from app.routes.health import health_bp
     
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(index_bp)
     app.register_blueprint(user_bp, url_prefix='/user')
     app.register_blueprint(memo_bp, url_prefix='/memo')
+    app.register_blueprint(health_bp)
     
     # 注册语言切换路由
     @app.route('/set_language/<language>')
@@ -132,12 +134,76 @@ def create_app(config_name='default'):
         if language in app.config['LANGUAGES']:
             session['language'] = language
         return redirect(request.referrer or url_for('index.index'))
-    
-    # 导入模型（必须在db初始化之后）
-    from app.models import User, Memo
-    
+
+    # 注册错误处理器
+    register_error_handlers(app)
+
+    # 配置日志
+    from app.utils.logging_config import setup_logging
+    setup_logging(app)
+
     # 创建数据库表（开发环境）
     with app.app_context():
         db.create_all()
-    
+
     return app
+
+
+def register_error_handlers(app):
+    """注册全局错误处理器"""
+
+    @app.errorhandler(400)
+    def bad_request_error(error):
+        """处理400错误"""
+        from flask import render_template
+        from flask_babel import gettext as _
+        return render_template('errors/400.html',
+                             title=_('Bad Request'),
+                             error=error), 400
+
+    @app.errorhandler(403)
+    def forbidden_error(error):
+        """处理403错误"""
+        from flask import render_template
+        from flask_babel import gettext as _
+        return render_template('errors/403.html',
+                             title=_('Access Forbidden'),
+                             error=error), 403
+
+    @app.errorhandler(404)
+    def not_found_error(error):
+        """处理404错误"""
+        from flask import render_template
+        from flask_babel import gettext as _
+        return render_template('errors/404.html',
+                             title=_('Page Not Found'),
+                             error=error), 404
+
+    @app.errorhandler(500)
+    def internal_error(error):
+        """处理500错误"""
+        from flask import render_template
+        from flask_babel import gettext as _
+        from app import db
+        # 回滚数据库会话，避免会话污染
+        db.session.rollback()
+        return render_template('errors/500.html',
+                             title=_('Internal Server Error'),
+                             error=error), 500
+
+    @app.errorhandler(Exception)
+    def handle_unexpected_error(error):
+        """处理未预期的错误"""
+        from flask import render_template, current_app
+        from flask_babel import gettext as _
+        from app import db
+
+        # 记录错误日志
+        current_app.logger.error(f'Unexpected error: {error}', exc_info=True)
+
+        # 回滚数据库会话
+        db.session.rollback()
+
+        return render_template('errors/500.html',
+                             title=_('Unexpected Error'),
+                             error=error), 500

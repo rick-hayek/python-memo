@@ -54,6 +54,13 @@ class Memo(db.Model):
     # 关联用户
     user = db.relationship('User', backref=db.backref('memos', lazy='dynamic'))
 
+    # 索引
+    __table_args__ = (
+        db.Index('idx_memo_user_status', 'user_id', 'status'),
+        db.Index('idx_memo_user_updated', 'user_id', 'updated_at'),
+        db.Index('idx_memo_expired', 'expired_at'),
+    )
+
     def __repr__(self):
         return f'<Memo {self.title[:20]}... ({self.status})>'
 
@@ -92,14 +99,28 @@ class Memo(db.Model):
 
     @classmethod
     def get_user_memos(cls, user_id, page=1, per_page=10):
-        """获取用户的备忘录（分页）"""
-        memos = cls.query.filter_by(user_id=user_id)\
-                        .order_by(cls.updated_at.desc())\
-                        .paginate(page=page, per_page=per_page, error_out=False)
-        
-        # 检查每个memo是否过期并自动更新状态
-        for memo in memos.items:
-            memo.check_and_update_expiry()
-            
-        return memos
+        """获取用户的备忘录（分页）- 优化版本"""
+        from datetime import datetime
+
+        # 获取分页结果
+        pagination = cls.query.filter_by(user_id=user_id)\
+                             .order_by(cls.updated_at.desc())\
+                             .paginate(page=page, per_page=per_page, error_out=False)
+
+        # 批量检查过期状态（只检查未过期且未关闭的memo）
+        now = datetime.utcnow()
+        expired_memos = []
+        for memo in pagination.items:
+            if (memo.expired_at and
+                memo.status not in [MemoStatus.EXPIRED, MemoStatus.CLOSED] and
+                now > memo.expired_at):
+                expired_memos.append(memo)
+
+        # 批量更新过期状态
+        if expired_memos:
+            for memo in expired_memos:
+                memo.status = MemoStatus.EXPIRED
+            db.session.commit()
+
+        return pagination
 
