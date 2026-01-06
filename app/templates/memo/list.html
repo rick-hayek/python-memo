@@ -40,11 +40,11 @@
                                 </form>
 
                                 <!-- 操作按钮 -->
-                                <div class="btn-group" role="group">
-                                    <a href="{{ url_for('memo.edit', memo_id=memo.id) }}" class="btn btn-sm btn-light" data-bs-toggle="tooltip" title="{{ _('Edit') }}">
+                                <div class="memo-actions btn-group" role="group">
+                                    <a href="{{ url_for('memo.edit', memo_id=memo.id) }}" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" title="{{ _('Edit') }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <button type="button" class="btn btn-sm btn-light" onclick="shareMemo({{ memo.id }}, '{{ memo.title }}')" data-bs-toggle="tooltip" title="{{ _('Share') }}">
+                                    <button type="button" class="btn btn-sm btn-outline-info" onclick="shareMemo({{ memo.id }}, '{{ memo.title }}')" data-bs-toggle="tooltip" title="{{ _('Share') }}">
                                         <i class="fas fa-share"></i>
                                     </button>
                                     <form method="post" action="{{ url_for('memo.delete', memo_id=memo.id) }}" class="d-inline"

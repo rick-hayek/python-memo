@@ -54,6 +54,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **CSP Violation**: Fixed Bootstrap CSS source map loading issue by updating CSP connect-src policy
 - **Database Performance**: Resolved N+1 query issues in memo listing operations
 - **Error Handling**: Improved error recovery and user feedback
+- **Button Border Styling**: Improved button group styling by moving inline styles to CSS
+  - Added `.memo-actions` CSS class for consistent button group appearance
+  - Unified border color to `lightgray` for all action buttons
 
 ### Technical Details
 - **Files Modified**: 15+ files across application layers
@@ -113,6 +116,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+
+### Changed
+- **Static Files Organization**: Moved static files from root directory to `app/static/` for better project structure
+  - Relocated `static/css/style.css`, `static/js/main.js` to `app/static/`
+  - Follows Flask best practices for application package structure
+  - No functional changes, maintains existing `url_for('static', filename=...)` references
+
+### Fixed
+- **Button Styling Consistency**: Fixed inconsistent button styles in memo list page
+  - Edit button: Changed from `btn-light` to `btn-outline-primary` (blue outline)
+  - Share button: Changed from `btn-light` to `btn-outline-info` (cyan outline)
+  - Delete button: Kept `btn-outline-danger` (red outline)
+  - All buttons now use consistent outline style with semantic colors
 
 ### Added
 - Initial project setup and basic functionality
